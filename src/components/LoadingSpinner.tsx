@@ -20,10 +20,10 @@ export default function LoadingSpinner() {
           repeat: Infinity, 
           ease: "linear",
         }}
-        className="relative w-24 h-24" // Размер можно изменить
+        className="relative w-24 h-24" 
       >
         <Image
-          src={LoadingImage}// Укажите путь к вашему изображению
+          src={LoadingImage}
           alt="Loading"
           width={96}
           height={96}

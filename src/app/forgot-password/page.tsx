@@ -1,12 +1,13 @@
-import LoginForm from '@/components/LoginForm'
+
+import ForgotPasswordForm from '@/components/ForgotPasswordForm'
 import { Suspense } from 'react'
 import LoadingSpinner from '@/components/LoadingSpinner'
 
-export default function LoginPage() {
+export default function ForgotPasswordPage() {
   return (
     <Suspense fallback={<LoadingSpinner />}>
       <div className="page">
-        <LoginForm />
+        <ForgotPasswordForm />
       </div>
     </Suspense>
   )

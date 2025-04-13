@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-import CatFooterImage from "../../public/login-footer.png";
 import RightImage from "../../public/login-header.png";
 import { useState } from "react";
 import { motion } from "framer-motion";
@@ -9,15 +8,20 @@ import { useRouter } from "next/navigation";
 import { z } from "zod";
 import OrCenter from "./ui/Or";
 
-const loginSchema = z.object({
-  email: z.string().email("Котик, ты чуть не правильно ввёл свой email"),
-  password: z.string().min(8, "Меньше 8 буковок в пароле ну не может быть :("),
-});
+const PasswordRecovery = z
+  .object({
+    password: z.string().min(8, "Паролю нужно минимум 6 буковок..."),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Парольчики не идентичны((",
+    path: ["confirmPassword"],
+  });
 
-export default function LoginForm() {
+export default function RegisterForm() {
   const [formData, setFormData] = useState({
-    email: "",
     password: "",
+    confirmPassword: "",
   });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -28,9 +32,9 @@ export default function LoginForm() {
     setIsLoading(true);
 
     try {
-      loginSchema.parse(formData);
+      PasswordRecovery.parse(formData);
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      router.push("/dashboard");
+      router.push("/login");
     } catch (err) {
       if (err instanceof z.ZodError) {
         setError(err.errors[0].message);
@@ -38,7 +42,7 @@ export default function LoginForm() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -53,58 +57,50 @@ export default function LoginForm() {
           <Image
             src={RightImage}
             alt="Левый котик"
-            width={100}
+            width={100} 
             height={100}
             className="object-contain"
           />
         </div>
       </div>
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-72 flex flex-col items-center z-10"
+        className="w-72 flex flex-col items-center z-10" 
       >
         <h2 className="w-full text-3xl font-bold text-left text-black mb-4">
-          И снова привет! Почему так часто пропадаешь...
+          Придумайте новый пароль
         </h2>
         <p className="w-full mb-12 text-gray-500 text-sm text-left">
-          Мы счастливы увидеть вас снова :)))
+          На колени на колени
         </p>
 
         <form onSubmit={handleSubmit} className="w-full space-y-4">
-          <div>
-            <input
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full p-3 pb-2 border-b-2 border-gray-300 focus:border-gray-500 focus:outline-none text-black "
-              placeholder="Email"
-            />
-          </div>
-
-          <div>
+            <div>
             <input
               name="password"
               type="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full p-3 pb-2 border-b-2 border-gray-300 focus:border-gray-500 focus:outline-none"
-              placeholder="Пароль"
+              className="w-full  p-3 pb-2 border-b-2 border-gray-300 focus:border-gray-500 focus:outline-none"
+              placeholder="Новый пароль"
               maxLength={20}
             />
           </div>
 
-          <div className="text-right mb-8">
-            <Link
-              href="/forgot-password"
-              className="text-sm text-gray-500 hover:text-black transition"
-            >
-              Забыли пароль?
-            </Link>
+          <div>
+            <input
+              name="confirmPassword"
+              type="password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              className="w-full  p-3 pb-2 border-b-2 border-gray-300 focus:border-gray-500 focus:outline-none mb-16"
+              placeholder="Повторите пароль"
+              maxLength={20}
+            />
           </div>
-
           {error && (
             <div className="text-gray-500 text-sm text-center">{error}</div>
           )}
@@ -115,7 +111,7 @@ export default function LoginForm() {
             disabled={isLoading}
             className="w-full bg-black text-white py-2 px-2 rounded-3xl transition text-lg font-medium hover:bg-gray-800"
           >
-            {isLoading ? "Пупупу" : "Войти"}
+            {isLoading ? "Пупупу" : "Сохранить"}
           </motion.button>
         </form>
 
@@ -133,16 +129,6 @@ export default function LoginForm() {
           </Link>
         </div>
       </motion.div>
-
-      <div className="fixed bottom-0 right-0 p-2 ">
-        <Image
-          src={CatFooterImage}
-          alt="Котик"
-          width={150}
-          height={150}
-          className="object-contain"
-        />
-      </div>
     </div>
   );
 }

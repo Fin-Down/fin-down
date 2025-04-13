@@ -9,15 +9,13 @@ import { useRouter } from "next/navigation";
 import { z } from "zod";
 import OrCenter from "./ui/Or";
 
-const loginSchema = z.object({
-  email: z.string().email("Котик, ты чуть не правильно ввёл свой email"),
-  password: z.string().min(8, "Меньше 8 буковок в пароле ну не может быть :("),
+const EmailCode = z.object({
+  code: z.string().length(6, "Коть у кодика должно быть 6 цифр"),
 });
 
-export default function LoginForm() {
+export default function EmailValiidation() {
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+    code: "",
   });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -28,9 +26,9 @@ export default function LoginForm() {
     setIsLoading(true);
 
     try {
-      loginSchema.parse(formData);
+      EmailCode.parse(formData);
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      router.push("/dashboard");
+      router.push("/password-recovery");
     } catch (err) {
       if (err instanceof z.ZodError) {
         setError(err.errors[0].message);
@@ -66,45 +64,23 @@ export default function LoginForm() {
         className="w-72 flex flex-col items-center z-10"
       >
         <h2 className="w-full text-3xl font-bold text-left text-black mb-4">
-          И снова привет! Почему так часто пропадаешь...
+          Подтверждение почты
         </h2>
         <p className="w-full mb-12 text-gray-500 text-sm text-left">
-          Мы счастливы увидеть вас снова :)))
+          На вашу почту должен придти код, введите его
         </p>
 
         <form onSubmit={handleSubmit} className="w-full space-y-4">
-          <div>
+          <div className="mb-20">
             <input
-              name="email"
-              type="email"
-              value={formData.email}
+              type="number"
+              name="code"
+              value={formData.code}
               onChange={handleChange}
               className="w-full p-3 pb-2 border-b-2 border-gray-300 focus:border-gray-500 focus:outline-none text-black "
-              placeholder="Email"
+              placeholder="Код"
             />
           </div>
-
-          <div>
-            <input
-              name="password"
-              type="password"
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full p-3 pb-2 border-b-2 border-gray-300 focus:border-gray-500 focus:outline-none"
-              placeholder="Пароль"
-              maxLength={20}
-            />
-          </div>
-
-          <div className="text-right mb-8">
-            <Link
-              href="/forgot-password"
-              className="text-sm text-gray-500 hover:text-black transition"
-            >
-              Забыли пароль?
-            </Link>
-          </div>
-
           {error && (
             <div className="text-gray-500 text-sm text-center">{error}</div>
           )}
@@ -115,11 +91,11 @@ export default function LoginForm() {
             disabled={isLoading}
             className="w-full bg-black text-white py-2 px-2 rounded-3xl transition text-lg font-medium hover:bg-gray-800"
           >
-            {isLoading ? "Пупупу" : "Войти"}
+            {isLoading ? "Пупупу" : "Подтвердить"}
           </motion.button>
         </form>
 
-        <OrCenter />
+        <OrCenter/>
 
         <div className="mt-1 text-center w-full">
           <Link href="/register">
@@ -133,16 +109,6 @@ export default function LoginForm() {
           </Link>
         </div>
       </motion.div>
-
-      <div className="fixed bottom-0 right-0 p-2 ">
-        <Image
-          src={CatFooterImage}
-          alt="Котик"
-          width={150}
-          height={150}
-          className="object-contain"
-        />
-      </div>
     </div>
   );
 }
