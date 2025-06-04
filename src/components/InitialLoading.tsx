@@ -5,6 +5,8 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import CatLoadingImage from "../../public/loading.png";
+import OrCenter from "./ui/Or";
+
 
 export default function InitialLoading() {
   const router = useRouter();

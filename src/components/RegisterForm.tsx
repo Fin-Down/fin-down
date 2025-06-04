@@ -1,3 +1,5 @@
+
+
 "use client";
 
 import { useState } from "react";
@@ -8,7 +10,6 @@ import { z } from "zod";
 import Image from "next/image";
 import RightImage from "../../public/login-header.png";
 import OrCenter from "./ui/Or";
-
 
 const registerSchema = z
   .object({
