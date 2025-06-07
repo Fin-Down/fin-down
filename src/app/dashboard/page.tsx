@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { auth } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import MobileNavbar from "./navbar/MobileNavbar";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -20,15 +19,12 @@ export default function Dashboard() {
   }, [router]);
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <MobileNavbar />
-      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          <div className="border-4 border-dashed border-gray-200 rounded-lg h-96 p-4">
-            <h1 className="text-2xl font-bold text-gray-900">
-              Добро пожаловать, {auth.currentUser?.displayName || "Пользователь"}!
-            </h1>
-            <button
+   <>
+   </>
+  );
+}
+
+    {/* <button
               onClick={async () => {
                 await auth.signOut();
                 router.push("/login");
@@ -36,13 +32,8 @@ export default function Dashboard() {
               className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
             >
               Выйти
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+            </button> */}
+
 
 // import { Suspense } from "react";
 // import LoadingSpinner from "@/components/LoadingSpinner";

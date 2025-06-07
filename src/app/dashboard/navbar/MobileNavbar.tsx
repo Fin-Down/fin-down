@@ -1,34 +1,43 @@
 'use client'
-import React, { useState } from 'react';
+import React from 'react';
 import { Home, Check, BarChart2, User } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 type NavItem = 'home' | 'check' | 'stats' | 'profile';
 
 const MobileNavbar: React.FC = () => {
-  const [active, setActive] = useState<NavItem>('home');
+  const pathname = usePathname();
 
-  const navItems: { id: NavItem; icon: React.ReactNode }[] = [
-    { id: 'home', icon: <Home /> },
-    { id: 'check', icon: <Check /> },
-    { id: 'stats', icon: <BarChart2 /> },
-    { id: 'profile', icon: <User /> },
+  const navItems: { 
+    id: NavItem; 
+    icon: React.ReactNode;
+    path: string 
+  }[] = [
+    { id: 'home', icon: <Home />, path: '/dashboard/home' },
+    { id: 'check', icon: <Check />, path: '/dashboard/tasks' },
+    { id: 'stats', icon: <BarChart2 />, path: '/dashboard/statistic' },
+    { id: 'profile', icon: <User />, path: '/dashboard/profile' },
   ];
 
+  // Проверяем, активен ли текущий путь
+  const isActive = (path: string) => pathname === path;
+
   return (
-    <nav className="fixed bottom-0 w-full flex justify-around bg-white border-t p-2">
+    <nav className="fixed bottom-0 w-full flex justify-around bg-white shadow-gray-800 shadow-2xl p-4">
       {navItems.map((item) => (
-        <button
+        <Link
           key={item.id}
-          onClick={() => setActive(item.id)}
+          href={item.path}
           className={`p-2 rounded-2xl transition ${
-            active === item.id ? 'bg-gray-300' : ''
+            isActive(item.path) ? 'bg-gray-300' : ''
           }`}
         >
           {item.icon}
-        </button>
+        </Link>
       ))}
     </nav>
   );
 };
 
-export default MobileNavbar;
+export default MobileNavbar; 

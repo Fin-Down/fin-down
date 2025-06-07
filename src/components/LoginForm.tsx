@@ -38,7 +38,7 @@ export default function LoginForm() {
     try {
       loginSchema.parse(formData);
       await signInWithEmailAndPassword(auth, formData.email, formData.password);
-      router.push("/dashboard");
+      router.push("/dashboard/home");
     } catch (err) {
       if (err instanceof z.ZodError) {
         setError(err.errors[0].message);
@@ -63,7 +63,7 @@ export default function LoginForm() {
     try {
       setIsLoading(true);
       await signInWithPopup(auth, googleProvider);
-      router.push("/dashboard");
+      router.push("/dashboard/home");
     } catch (error) {
       setError("Ошибка при входе через Google");
     } finally {
